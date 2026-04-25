@@ -133,12 +133,12 @@ export const adminLogin = async (req, res) => {
       return errorResponse(res, "Email and password are required.");
     }
 
-    const user = await User.findOne({ email, role: "admin" }).select("+password");
+    const user = await User.findOne({ email, role: "admin" });
     if (!user) {
       return errorResponse(res, "Invalid credentials.", 401);
     }
 
-    const isPasswordCorrect = await user.comparePassword(password);
+    const isPasswordCorrect = await user.comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       return errorResponse(res, "Invalid credentials.", 401);
     }
